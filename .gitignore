@@ -243,3 +243,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Fixturio/images
+/Fixturio/logs
+/Fixturio/Migrations
