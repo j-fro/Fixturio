@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Fixturio.Models.DisplayElement>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"
+        type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        // Document.ready -> link up remove event handler
+        $(".RemoveLink").click(function () {
+            // Get the id from the link
+            var recordToDelete = $(this).attr("data-id");
+            if (recordToDelete != '') {
+                // Perform AJAX post
+                $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+                    function (data) {
+                        // Successful requests get here
+                        // Update the page elements
+                        if (data.ItemCount == 0) {
+                            $('#row-' + data.DeleteID).fadeOut('slow');
+                        } else {
+                            $('#item-count-' + data.DeleteID).text(data.ItemCount);
+                        }
+                        $('#cart-total').text(data.CartTotal);
+                        $('#update-message').text(data.Message);
+                        $('#cart-status').text('Cart (' + data.CartCount + ')');
+                    });
+            }
+        });
+    });
+</script>
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Image
+        </th>
+        <th>
+            Details
+        </th>
+        <th>
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @if (item.FilePaths.Any(f => f.FileType == Fixturio.Models.FileType.Photo))
+        {
+            <td>
+                <img src="~/images/@item.FilePaths.First(f => f.FileType == Fixturio.Models.FileType.Photo).FileName" alt="" width="150" />
+            </td>
+        }
+        <td>
+            <div>
+                <p>Model Number: @Html.DisplayFor(modelItem => item.ModelNumber)</p>
+                <p>@Html.DisplayFor(modelItem => item.Name)</p>
+                <p>Length: @Html.DisplayFor(modelItem => item.Length)</p>
+                <p>Width: @Html.DisplayFor(modelItem => item.Width)</p>
+                <p>Height: @Html.DisplayFor(modelItem => item.Height)</p>
+            </div>
+        </td>
+        <td>
+            <div>
+                @Html.ActionLink("Add", "AddToCart", "ShoppingCart", new { id = item.DisplayElementID }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Remove", "RemoveFromCart", "ShoppingCart", new { id = item.DisplayElementID }, new { @class = "btn btn-danger" })
+            </div>
+        </td>
+        <!--
+        <td>
+            @Html.DisplayFor(modelItem => item.ModelNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Length)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Width)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Height)
+        </td>
+        
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.DisplayElementID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.DisplayElementID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.DisplayElementID })
+        </td>-->
+    </tr>
+}
+
+</table>

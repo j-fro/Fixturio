@@ -38,6 +38,29 @@ namespace Fixturio.Controllers
             return RedirectToAction("Index");
         }
 
+        // AJAX: /ShoppingCart/AddToCart/5
+        [HttpPost]
+        public ActionResult AddToCartAJAX(int id)
+        {
+            var addedElement = storeDB.DisplayElements.Single(e => e.DisplayElementID == id);
+
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+            cart.AddToCart(addedElement);
+
+            int itemCount = storeDB.Carts.Single(c => c.RecordID == id).Count;
+
+            var results = new ShoppingCartAddViewModel
+            {
+                Message = Server.HtmlEncode(addedElement.Name) + " has been added to your cart",
+                CartTotal = cart.GetCount(),
+                CartCount = cart.GetCount(),
+                ItemCount = itemCount,
+                AddID = id
+            };
+
+            return Json(results);
+        }
+
         // AJAX: /ShoppingCart/RemoveFromCart/5
         [HttpPost]
         public ActionResult RemoveFromCart(int id)

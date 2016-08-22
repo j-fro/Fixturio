@@ -12,6 +12,7 @@ namespace Fixturio.Models
         public int Width { get; set; }
         public int Height { get; set; }
         
+        public virtual Category Category { get; set; }
         public virtual ICollection<FilePath> FilePaths { get; set; }
     }
 
@@ -22,7 +23,8 @@ namespace Fixturio.Models
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
-        public System.Data.Entity.DbSet<Fixturio.ViewModels.ShoppingCartViewModel> ShoppingCartViewModels { get; set; }
+        public DbSet<ViewModels.ShoppingCartViewModel> ShoppingCartViewModels { get; set; }
     }
 }

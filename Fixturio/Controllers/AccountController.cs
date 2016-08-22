@@ -79,6 +79,7 @@ namespace Fixturio.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    MigrateShoppingCart(model.Email);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -156,6 +157,7 @@ namespace Fixturio.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    MigrateShoppingCart(model.Email);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -421,6 +423,15 @@ namespace Fixturio.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        private void MigrateShoppingCart(string userName)
+        {
+            // Associate shopping cart items with logged-in user
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
+            cart.MigrateCart(userName);
+            Session[ShoppingCart.CartSessionKey] = userName;
         }
 
         #region Helpers

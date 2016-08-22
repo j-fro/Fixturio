@@ -11,7 +11,7 @@ using log4net;
 
 namespace Fixturio.Controllers
 {
-    public class DisplayElementsController : Controller
+    public class DisplayManagementController : Controller
     {
         private DisplayElementDBContext db = new DisplayElementDBContext();
         readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
