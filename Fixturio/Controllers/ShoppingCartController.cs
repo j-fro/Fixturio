@@ -83,6 +83,51 @@ namespace Fixturio.Controllers
             return Json(results);
         }
 
+        // AJAX: /ShoppingCart/RemoveFromCartFromBrowse/5
+        [HttpPost]
+        public ActionResult RemoveFromCartFromBrowse(int id)
+        {
+            var shoppingCart = ShoppingCart.GetCart(this.HttpContext);
+
+            string elementName = storeDB.DisplayElements.Single(d => d.DisplayElementID == id).Name;
+
+            var cart = storeDB.Carts.Single(c => c.DisplayElementID == id
+                                            && c.CartID == shoppingCart.ShoppingCartID);
+
+            int itemCount = shoppingCart.RemoveFromCart(cart.RecordID);
+
+            var results = new ShoppingCartRemoveViewModel
+            {
+                Message = Server.HtmlEncode(elementName) + " has been removed from your cart",
+                CartTotal = shoppingCart.GetCount(),
+                CartCount = shoppingCart.GetCount(),
+                ItemCount = itemCount,
+                DeleteID = cart.RecordID
+            };
+
+            return Json(results);
+        }
+
+        // GET: /ShoppingCart/ItemCount/5
+        [ChildActionOnly]
+        public ActionResult ItemCount(int id)
+        {
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
+            
+            var results = storeDB.Carts.SingleOrDefault(c => c.DisplayElementID == id
+                                                        && c.CartID == cart.ShoppingCartID);
+            if (results != null)
+            {
+                ViewData["Count"] = results.Count;
+            }
+            else
+            {
+                ViewData["Count"] = 0;
+            }
+            return PartialView("ItemCount");
+        }
+
         // GET: /ShoppingCart/CartSummary
         [ChildActionOnly]
         public ActionResult CartSummary()

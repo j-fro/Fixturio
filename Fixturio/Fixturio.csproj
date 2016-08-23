@@ -197,6 +197,10 @@
     <Compile Include="Migrations\201608212051058_Categories.Designer.cs">
       <DependentUpon>201608212051058_Categories.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608220520564_Carts.cs" />
+    <Compile Include="Migrations\201608220520564_Carts.Designer.cs">
+      <DependentUpon>201608220520564_Carts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Cart.cs" />
@@ -282,6 +286,7 @@
     <Content Include="Views\Browse\Index.cshtml" />
     <Content Include="Views\ShoppingCart\CartSummary.cshtml" />
     <Content Include="Views\Browse\CategoryMenu.cshtml" />
+    <Content Include="Views\ShoppingCart\ItemCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -307,6 +312,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608212051058_Categories.resx">
       <DependentUpon>201608212051058_Categories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608220520564_Carts.resx">
+      <DependentUpon>201608220520564_Carts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

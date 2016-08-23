@@ -9,8 +9,9 @@ namespace Fixturio.Models
     public partial class ShoppingCart
     {
         DisplayElementDBContext storeDB = new DisplayElementDBContext();
-        string ShoppingCartID { get; set; }
-        public const string CartSessionKey = "CardID";
+        public string ShoppingCartID { get; set; }
+        public const string CartSessionKey = "CartID";
+
         public static ShoppingCart GetCart(HttpContextBase context)
         {
             var cart = new ShoppingCart();

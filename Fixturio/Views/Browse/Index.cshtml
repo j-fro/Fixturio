@@ -14,7 +14,7 @@
             var recordToDelete = $(this).attr("data-id");
             if (recordToDelete != '') {
                 // Perform AJAX post
-                $.post("/ShoppingCart/RemoveFromCart", { "id": recordToDelete },
+                $.post("/ShoppingCart/RemoveFromCartFromBrowse", { "id": recordToDelete },
                     function (data) {
                         // Successful requests get here
                         // Update the page elements
@@ -29,6 +29,24 @@
                     });
             }
         });
+    });
+</script>
+<script>
+    $('#btnAjax').click(function () {
+        var element = $(this).attr("data-id")
+        $.ajax({
+            url: '/ShoppingCart/ItemCount',
+            contentType: 'application/html; charset=utf-8',
+            data: { id: element },
+            type: 'GET',
+            dataType: 'html'
+        })
+        .success(function (result) {
+            $('#count').html(result);
+        })
+        .error(function (xhr, status) {
+            alert(status)
+        })
     });
 </script>
 
@@ -67,32 +85,13 @@
         </td>
         <td>
             <div>
+                <p>@{ Html.RenderAction("ItemCount", "ShoppingCart", new { id = item.DisplayElementID }); }</p>
+            </div>
+            <div>
+                <a href="#" class="RemoveLink btn btn-danger" data-id="@item.DisplayElementID">Remove</a>
                 @Html.ActionLink("Add", "AddToCart", "ShoppingCart", new { id = item.DisplayElementID }, new { @class = "btn btn-success" })
-                @Html.ActionLink("Remove", "RemoveFromCart", "ShoppingCart", new { id = item.DisplayElementID }, new { @class = "btn btn-danger" })
             </div>
         </td>
-        <!--
-        <td>
-            @Html.DisplayFor(modelItem => item.ModelNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Length)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Width)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Height)
-        </td>
-        
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.DisplayElementID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.DisplayElementID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.DisplayElementID })
-        </td>-->
     </tr>
 }
 
