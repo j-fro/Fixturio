@@ -43,12 +43,14 @@ namespace Fixturio.Models
             return context.Session[CartSessionKey].ToString();
         }
 
-        public void AddToCart(DisplayElement element)
+        public int AddToCart(DisplayElement element)
         {
             // Get the matching cart and element instances
             var cartItem = storeDB.Carts.SingleOrDefault(
                 c => c.CartID == ShoppingCartID
                 && c.DisplayElementID == element.DisplayElementID);
+
+            int itemCount = 0;
 
             if (cartItem == null)
             {
@@ -61,13 +63,16 @@ namespace Fixturio.Models
                     DateCreated = DateTime.Now
                 };
                 storeDB.Carts.Add(cartItem);
+                itemCount = cartItem.Count;
             }
             else
             {
                 // If the item does exist in a cart, incremenet the count
                 cartItem.Count++;
+                itemCount = cartItem.Count;
             }
             storeDB.SaveChanges();
+            return itemCount;
         }
 
         public int RemoveFromCart(int id)

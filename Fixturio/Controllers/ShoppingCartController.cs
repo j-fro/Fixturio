@@ -42,18 +42,20 @@ namespace Fixturio.Controllers
         [HttpPost]
         public ActionResult AddToCartAJAX(int id)
         {
-            var addedElement = storeDB.DisplayElements.Single(e => e.DisplayElementID == id);
+            var shoppingCart = ShoppingCart.GetCart(this.HttpContext);
 
-            var cart = ShoppingCart.GetCart(this.HttpContext);
-            cart.AddToCart(addedElement);
+            var element = storeDB.DisplayElements.Single(d => d.DisplayElementID == id);
 
-            int itemCount = storeDB.Carts.Single(c => c.RecordID == id).Count;
+            //var cart = storeDB.Carts.Single(c => c.DisplayElementID == id
+            //                                && c.CartID == shoppingCart.ShoppingCartID);
+
+            int itemCount = shoppingCart.AddToCart(element);
 
             var results = new ShoppingCartAddViewModel
             {
-                Message = Server.HtmlEncode(addedElement.Name) + " has been added to your cart",
-                CartTotal = cart.GetCount(),
-                CartCount = cart.GetCount(),
+                Message = Server.HtmlEncode(element.Name) + " has been added to your cart",
+                CartTotal = shoppingCart.GetCount(),
+                CartCount = shoppingCart.GetCount(),
                 ItemCount = itemCount,
                 AddID = id
             };
@@ -102,7 +104,7 @@ namespace Fixturio.Controllers
                 CartTotal = shoppingCart.GetCount(),
                 CartCount = shoppingCart.GetCount(),
                 ItemCount = itemCount,
-                DeleteID = cart.RecordID
+                DeleteID = id
             };
 
             return Json(results);
@@ -125,6 +127,7 @@ namespace Fixturio.Controllers
             {
                 ViewData["Count"] = 0;
             }
+            ViewData["ID"] = id;
             return PartialView("ItemCount");
         }
 
