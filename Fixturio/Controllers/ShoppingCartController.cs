@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Fixturio.Models;
 using Fixturio.ViewModels;
@@ -26,21 +23,9 @@ namespace Fixturio.Controllers
             return View(viewModel);
         }
 
-        // GET: /Store/AddToCart/5
-        public ActionResult AddToCart(int id)
-        {
-            var addedElement = storeDB.DisplayElements
-                .Single(e => e.DisplayElementID == id);
-
-            var cart = ShoppingCart.GetCart(this.HttpContext);
-            cart.AddToCart(addedElement);
-
-            return RedirectToAction("Index");
-        }
-
         // AJAX: /ShoppingCart/AddToCart/5
         [HttpPost]
-        public ActionResult AddToCartAJAX(int id)
+        public ActionResult AddToCart(int id)
         {
             var shoppingCart = ShoppingCart.GetCart(this.HttpContext);
 
@@ -51,13 +36,13 @@ namespace Fixturio.Controllers
 
             int itemCount = shoppingCart.AddToCart(element);
 
-            var results = new ShoppingCartAddViewModel
+            var results = new ShoppingCartChangeViewModel
             {
                 Message = Server.HtmlEncode(element.Name) + " has been added to your cart",
                 CartTotal = shoppingCart.GetCount(),
                 CartCount = shoppingCart.GetCount(),
                 ItemCount = itemCount,
-                AddID = id
+                ChangeID = id
             };
 
             return Json(results);
@@ -73,13 +58,13 @@ namespace Fixturio.Controllers
 
             int itemCount = cart.RemoveFromCart(id);
 
-            var results = new ShoppingCartRemoveViewModel
+            var results = new ShoppingCartChangeViewModel
             {
                 Message = Server.HtmlEncode(elementName) + " has been removed from your cart",
                 CartTotal = cart.GetCount(),
                 CartCount = cart.GetCount(),
                 ItemCount = itemCount,
-                DeleteID = id
+                ChangeID = id
             };
 
             return Json(results);
@@ -98,13 +83,13 @@ namespace Fixturio.Controllers
 
             int itemCount = shoppingCart.RemoveFromCart(cart.RecordID);
 
-            var results = new ShoppingCartRemoveViewModel
+            var results = new ShoppingCartChangeViewModel
             {
                 Message = Server.HtmlEncode(elementName) + " has been removed from your cart",
                 CartTotal = shoppingCart.GetCount(),
                 CartCount = shoppingCart.GetCount(),
                 ItemCount = itemCount,
-                DeleteID = id
+                ChangeID = id
             };
 
             return Json(results);

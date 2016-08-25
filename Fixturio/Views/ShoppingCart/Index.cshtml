@@ -36,9 +36,12 @@
     <em>Review</em> your cart:
 </h3>
 
-<p class="button">
+<div class="btn btn-primary">
+    @Html.ActionLink("<< Back to Browse", "Index", "BrowseController")
+</div>
+<div class="btn btn-primary">
     @Html.ActionLink("Checkout >>", "Index", "Checkout")
-</p>
+</div>
 
 <div id="update-message">
 </div>

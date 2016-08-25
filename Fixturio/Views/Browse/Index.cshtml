@@ -18,7 +18,7 @@
                     function (data) {
                         // Successful requests get here
                         // Update the page elements
-                        $('#item-count-' + data.DeleteID).text(data.ItemCount);
+                        $('#item-count-' + data.ChangeID).text(data.ItemCount);
                         $('#cart-total').text(data.CartTotal);
                         $('#update-message').text(data.Message);
                         $('#cart-status').text('Cart (' + data.CartCount + ')');
@@ -35,11 +35,11 @@
             var recordToAdd = $(this).attr("data-id");
             if (recordToAdd != '') {
                 // Perform AJAX post
-                $.post("/ShoppingCart/AddToCartAJAX", { "id": recordToAdd },
+                $.post("/ShoppingCart/AddToCart", { "id": recordToAdd },
                     function (data) {
                         // Successful requests get here
                         // Update the page elements
-                        $('#item-count-' + data.AddID).text(data.ItemCount);
+                        $('#item-count-' + data.ChangeID).text(data.ItemCount);
                         $('#cart-total').text(data.CartTotal);
                         $('#update-message').text(data.Message);
                         $('#cart-status').text('Cart (' + data.CartCount + ')');
@@ -87,8 +87,8 @@
                 <p>@{ Html.RenderAction("ItemCount", "ShoppingCart", new { id = item.DisplayElementID }); }</p>
             </div>
             <div>
-                <a href="#" class="AddLink btn btn-success" data-id="@item.DisplayElementID">Add</a>
-                <a href="#" class="RemoveLink btn btn-danger" data-id="@item.DisplayElementID">Remove</a>                
+                <input type="button" value="Add" class="AddLink btn btn-success" data-id="@item.DisplayElementID" />
+                <input type="button" value="Remove" class="RemoveLink btn btn-danger" data-id="@item.DisplayElementID" />                
             </div>
         </td>
     </tr>
