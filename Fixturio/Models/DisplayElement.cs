@@ -26,5 +26,8 @@ namespace Fixturio.Models
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<ViewModels.ShoppingCartViewModel> ShoppingCartViewModels { get; set; }
+
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<UserName> UserNames { get; set; }
     }
 }

@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Fixturio.Models.Customer>
+
+<div>
+    @Html.DropDownList("Customers", new SelectList(Model.Select(c => c.Name).ToList()))
+</div>
+<div>
+    @foreach (var model in Model)
+    {
+        <p>model.Name</p>
+    }
+</div>

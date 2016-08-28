@@ -13,14 +13,27 @@ namespace Fixturio.Controllers
         DisplayElementDBContext storeDB = new DisplayElementDBContext();
 
         // GET: Checkout
-        public ActionResult Index()
+        public ActionResult OrderDetails()
         {
+            var user = (from u in storeDB.UserNames
+                        where u.Name == HttpContext.User.Identity.Name
+                        select u).SingleOrDefault();
+
+            var customers = from c in storeDB.Customers
+                            where c.Users.Any(u => u.Name == HttpContext.User.Identity.Name)
+                            select c.Name;
+
+            foreach (string cust in customers)
+            {
+                Console.WriteLine(cust);
+            }
+            ViewBag.Customers = new SelectList(customers);
             return View();
         }
 
         // POST: Checkout
         [HttpPost]
-        public ActionResult Index(FormCollection values)
+        public ActionResult OrderDetails(FormCollection values)
         {
             var order = new Order();
             TryUpdateModel(order);
@@ -29,6 +42,12 @@ namespace Fixturio.Controllers
             {
                 order.Username = User.Identity.Name;
                 order.OrderDate = DateTime.Now;
+
+                var customer = (from c in storeDB.Customers
+                                where c.Name == values["Customer"].ToString()
+                                select c).FirstOrDefault();
+
+                order.Customer = customer;
                 // Save order
                 storeDB.Orders.Add(order);
                 storeDB.SaveChanges();
